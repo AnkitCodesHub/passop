@@ -8,12 +8,13 @@ function App() {
   return (
     <>
       <div className='flex flex-col min-h-screen'>
-      <Navbar />
-      <div className='flex-grow'>
-        <Manager />
-      </div>
-      
-      <Footer />
+        <Navbar />
+        <div className='flex-grow'>
+          <div className= "bg-green-50 bg-[linear-gradient(to_right,
+            #8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]"><Manager />
+          </div></div>
+
+        <Footer />
       </div>
     </>
   )

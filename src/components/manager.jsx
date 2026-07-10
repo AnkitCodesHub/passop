@@ -46,24 +46,62 @@ const manager = () => {
         }
     }
     const savePassword = () => {
-        const newEntry = { site: form.site, username: form.username, password: form.password, id: uuidv4() }
-        const updatedPasswords = [...passwordArray, newEntry];
-        setPasswordArray(updatedPasswords);
-        localStorage.setItem("passwords", JSON.stringify(updatedPasswords))
-        setform({ site: "", username: "", password: "" });
+        if (form.site.length > 3 && form.username.length > 3 && form.password.length > 3) {
+            const newEntry = { site: form.site, username: form.username, password: form.password, id: uuidv4() }
+            const updatedPasswords = [...passwordArray, newEntry];
+            setPasswordArray(updatedPasswords);
+            localStorage.setItem("passwords", JSON.stringify(updatedPasswords))
+            setform({ site: "", username: "", password: "" });
+            toast('Password saved!!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
+        }
+        else {
+            toast('Error: password Not saved!!')
+        }
     }
     const handleChange = (e) => {
         setform({ ...form, [e.target.name]: e.target.value })
     }
     const deletePassword = (id) => {
-        if (confirm("Delete this password?")) {
-            const updated = passwordArray(updated)
-            localstorage.setItem("passwords".JSON.stringify(updated))
+        let c = confirm("Do you want to delete this password")
+        if (c) {
+            const updated = passwordArray.filter(item => item.id !== id)
+            setPasswordArray(updated)
+            localStorage.setItem("passwords", JSON.stringify(passwordArray.filter(item => item.id !== id)))
+            toast('Passwod Deleted', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
         }
     }
     const editPassword = id => {
+        console.log("Editing password with id", id)
         setform(passwordArray.filter(i => i.id === id)[0])
         setPasswordArray(passwordArray.filter(item => item.id !== id))
+        // toast('Password Edited', {
+        //     position: "top-right",
+        //     autoClose: 5000,
+        //     hideProgressBar: false,
+        //     closeOnClick: true,
+        //     pauseOnHover: true,
+        //     draggable: true,
+        //     progress: undefined,
+        //     theme: "dark",
+        // });
     }
     return (
         <>
@@ -78,7 +116,7 @@ const manager = () => {
                 draggable
                 pauseOnHover
                 theme="light"
-                transition="Bounce"
+
             />
 
 
@@ -87,7 +125,7 @@ const manager = () => {
             #8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]">
                     <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-fuchsia-400 opacity-20 blur-[100px]">
                     </div></div>
-                <div className=" mycontainer ">
+                <div className="p-2 pt-9 md:p-0 md:mycontainer ">
                     <h1 className='text-4xl text font-bold text-center'>
 
                         <span className='text-green-700'>&lt;</span>
@@ -96,10 +134,10 @@ const manager = () => {
                     </h1>
                     <p className="text-green-900 text-lg text-center">Your own Password Manager</p>
                     <div className=" flex flex-col p-4 text-black gap-5 items-center">
-                        <input value={form.site} onChange={handleChange} placeholder='Enter website url' className="w-full rounded-full border border-green-800    p-4 py-1" type="text" name="site" id="" />
-                        <div className="flex w-full justify-between gap-8">
-                            <input value={form.username} onChange={handleChange} placeholder='Enter username' className="w-full rounded-full border border-green-500    p-4 py-1" type="text" name="username" id="" />
-                            <div className="relative">
+                        <input value={form.site} onChange={handleChange} placeholder='Enter website url' className="w-full rounded-full border border-green-800    p-4 py-1" type="text" name="site" id="site" />
+                        <div className="flex flex-col md:flex-row w-full justify-between gap-8">
+                            <input value={form.username} onChange={handleChange} placeholder='Enter username' className="w-full rounded-full border border-green-500    p-4 py-1" type="text" name="username" id="username" />
+                            <div className="relative flex flex-col md:flex-row">
                                 <input ref={PasswordRef} value={form.password} onChange={handleChange} placeholder='Enter Password' className="w-full rounded-full border border-green-500    p-4 py-1" type="password" name="password" id="password" />
                                 <span className='absolute right-[1px] top-[2px] cursor-pointer' onClick={showPassword}>
                                     <img ref={ref} className='p-1' width={30} src="icons/eye.png" alt="eye" />
